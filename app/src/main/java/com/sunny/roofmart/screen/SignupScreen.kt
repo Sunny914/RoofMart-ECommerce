@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -25,10 +26,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.sunny.roofmart.AppUtil
 import com.sunny.roofmart.R
+import com.sunny.roofmart.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier){
+fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel = viewModel()){
 
     var email by remember {
         mutableStateOf("")
@@ -39,6 +44,11 @@ fun SignupScreen(modifier: Modifier = Modifier){
     var password by remember {
         mutableStateOf("")
     }
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+
+    var context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize()
         .padding(32.dp),
@@ -111,12 +121,25 @@ fun SignupScreen(modifier: Modifier = Modifier){
 
 
         Button(onClick = {
-           // navController.navigate("login")
+            isLoading = true
+           authViewModel.signup(email, name, password){success, errorMessage->
+               if(success){
+                   isLoading = false
+                    navController.navigate("home"){
+                        popUpTo("auth") {inclusive = true}
+                    }
+               }else{
+                   isLoading = false
+                    AppUtil.showToast(context, errorMessage?:"Something went wrong")
+               }
+           }
         },
-            modifier = Modifier.fillMaxWidth()
+            enabled = !isLoading,
+            modifier = Modifier
+                .fillMaxWidth()
                 .height(60.dp)
         ) {
-            Text(text = "Signup", fontSize = 22.sp)
+            Text(text = if(isLoading)"Creating Account " else "Signup", fontSize = 22.sp)
         }
 
 

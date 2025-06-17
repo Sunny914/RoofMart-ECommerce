@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "547851711446",
+    "project_id": "roofmart-3a301",
+    "storage_bucket": "roofmart-3a301.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547851711446:android:562edd3df5f238ed09ea77",
+        "android_client_info": {
+          "package_name": "com.sunny.roofmart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxYpAEHDhEy3fTGnp02LBQPUeP4Nugq6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
