@@ -2,7 +2,6 @@ package com.sunny.roofmart
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,7 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.sunny.roofmart.pages.CategoryProductsPage
-import com.sunny.roofmart.pages.ProductDetailsPage
+import com.sunny.roofmart.components.ProductDetailsPage
+import com.sunny.roofmart.pages.CheckoutPage
 import com.sunny.roofmart.screen.AuthScreen
 import com.sunny.roofmart.screen.HomeScreen
 import com.sunny.roofmart.screen.LoginScreen
@@ -51,6 +51,10 @@ fun AppNavigation(modifier: Modifier = Modifier){
         composable("product-details/{productId}"){
             var productId = it.arguments?.getString("productId")
             ProductDetailsPage(modifier, productId?:"")
+        }
+
+        composable("checkout"){
+            CheckoutPage(modifier)
         }
 
 

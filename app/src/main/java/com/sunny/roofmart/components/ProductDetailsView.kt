@@ -1,4 +1,4 @@
-package com.sunny.roofmart.pages
+package com.sunny.roofmart.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.sunny.roofmart.AppUtil
 import com.sunny.roofmart.model.ProductModel
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
@@ -49,6 +50,8 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId : String){
     var product by remember {
         mutableStateOf(ProductModel())
     }
+
+    var context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
         Firebase.firestore.collection("data").document("stock")
@@ -142,7 +145,9 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId : String){
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                 AppUtil.addItemToCart(productId, context)
+            },
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             Text(text = "Add to Cart", fontSize = 16.sp)

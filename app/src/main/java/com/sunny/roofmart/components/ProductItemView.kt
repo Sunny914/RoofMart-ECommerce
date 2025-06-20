@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -27,11 +28,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.sunny.roofmart.AppUtil
 import com.sunny.roofmart.GlobalNavigation
 import com.sunny.roofmart.model.ProductModel
 
 @Composable
 fun ProductItemView(modifier: Modifier = Modifier, product : ProductModel){
+
+    var context = LocalContext.current
 
     Card(
         modifier = modifier
@@ -83,7 +87,9 @@ fun ProductItemView(modifier: Modifier = Modifier, product : ProductModel){
                 Spacer(modifier = Modifier.width(8.dp))
 
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        AppUtil.addItemToCart(product.id, context)
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Default.ShoppingCart,
