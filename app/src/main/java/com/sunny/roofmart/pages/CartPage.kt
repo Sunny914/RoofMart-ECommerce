@@ -1,5 +1,6 @@
 package com.sunny.roofmart.pages
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,31 +67,45 @@ fun CartPage(modifier: Modifier = Modifier){
             )
         )
 
-    LazyColumn(
-        modifier = Modifier.weight(1f)
-    ) {
-        items(userModel.value.cartItems.toList(), key = {it.first}){(productId, qty)->
-            CartItemView(productId = productId, qty = qty)
+
+        if(userModel.value.cartItems.isNotEmpty()){
+
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(userModel.value.cartItems.toList(), key = {it.first}){(productId, qty)->
+                    CartItemView(productId = productId, qty = qty)
+                }
+
+            }
+
+            Button(
+                onClick = {
+                    GlobalNavigation.navController.navigate("checkout")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height( 50.dp)
+
+
+            ) {
+                Text(text = "Checkout")
+            }
+
+            Spacer(modifier = Modifier.height(80.dp))
+
+            Text(text = ".....")
+        }
+        else{
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "No items here", fontSize = 32.sp)
+            }
         }
 
-    }
-
-        Button(
-            onClick = {
-                GlobalNavigation.navController.navigate("checkout")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height( 50.dp)
-
-
-        ) {
-            Text(text = "Checkout")
-        }
-
-        Spacer(modifier = Modifier.height(80.dp))
-
-        Text(text = ".....")
     }
 
 

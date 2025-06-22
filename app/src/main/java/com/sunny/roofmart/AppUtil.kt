@@ -6,12 +6,16 @@ import android.widget.Toast
 //import com.google.api.Context
 import android.content.Context // ✅ Correct import
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import com.google.firestore.admin.v1.Index.IndexField.Order
 import com.razorpay.Checkout
+import com.sunny.roofmart.model.OrderModel
 import org.json.JSONObject
 import java.time.temporal.TemporalAmount
+import java.util.UUID
 
 
 object AppUtil {
@@ -71,6 +75,37 @@ object AppUtil {
                         }
                         else{
                             showToast(context, "Failed removing item to the cart")
+                        }
+                    }
+
+            }
+        }
+    }
+
+
+    fun clearCartAndAddToOrders(){
+        val userDoc = Firebase.firestore.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+
+        userDoc.get().addOnCompleteListener{
+            if (it.isSuccessful) {
+                val currentCart = it.result.get("cartItems") as? Map<String, Long> ?: emptyMap()
+
+                val order = OrderModel(
+                    id = "ORD_" + UUID.randomUUID().toString().replace("-", "").take(10).uppercase(),
+                    userID = FirebaseAuth.getInstance().currentUser?.uid!!,
+                    date = Timestamp.now(),
+                    items = currentCart,
+                    status = "ORDERED",
+                    address = it.result.get("address") as String
+                )
+
+                Firebase.firestore.collection("orders")
+                    .document(order.id).set(order)
+                    .addOnCompleteListener{
+                        if(it.isSuccessful){
+
+                            userDoc.update("cartItems", FieldValue.delete())
                         }
                     }
 
